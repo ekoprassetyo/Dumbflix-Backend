@@ -52,7 +52,5 @@ func convertResponseProfile(u models.Profile) profiledto.ProfileResponse {
 		Gender:    u.Gender,
 		Address:   u.Address,
 		Subscribe: u.Subscribe,
-		UserID:    u.UserID,
-		User:      u.User,
 	}
 }

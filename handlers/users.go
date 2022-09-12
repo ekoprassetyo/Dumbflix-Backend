@@ -21,10 +21,10 @@ func HandlerUser(UserRepository repositories.UserRepository) *handler {
 	return &handler{UserRepository}
 }
 
-func (h *handler) FindUser(w http.ResponseWriter, r *http.Request) {
+func (h *handler) FindAllUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	Users, err := h.UserRepository.FindUser()
+	Users, err := h.UserRepository.FindAllUser()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(err.Error())
@@ -74,9 +74,13 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	User := models.User{
-		Name:     request.Name,
-		Email:    request.Email,
-		Password: request.Password,
+		Name:      request.Name,
+		Email:     request.Email,
+		Password:  request.Password,
+		Gender:    request.Gender,
+		Phone:     request.Phone,
+		Address:   request.Address,
+		Subscribe: false,
 	}
 
 	data, err := h.UserRepository.CreateUser(User)
@@ -163,9 +167,13 @@ func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 func convertResponse(u models.User) Usersdto.UserResponse {
 	return Usersdto.UserResponse{
-		ID:       u.ID,
-		Name:     u.Name,
-		Email:    u.Email,
-		Password: u.Password,
+		ID:        u.ID,
+		Name:      u.Name,
+		Email:     u.Email,
+		Password:  u.Password,
+		Gender:    u.Gender,
+		Phone:     u.Phone,
+		Address:   u.Address,
+		Subscribe: false,
 	}
 }

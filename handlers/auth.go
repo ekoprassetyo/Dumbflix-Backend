@@ -55,10 +55,14 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{
-		Name:     request.Name,
-		Email:    request.Email,
-		Password: password,
-		Status:   "Customer",
+		Name:      request.Name,
+		Email:     request.Email,
+		Password:  password,
+		Gender:    request.Gender,
+		Phone:     request.Phone,
+		Address:   request.Address,
+		Subscribe: false,
+		Status:    "Customer",
 	}
 
 	dataUser, err := h.AuthRepository.Register(user)
@@ -75,7 +79,6 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 		Address:   request.Address,
 		Phone:     request.Phone,
 		Subscribe: false,
-		UserID:    dataUser.ID,
 	}
 
 	dataProfile, errProfile := h.ProfileRepository.AddProfile(profilGaPakeEl)
@@ -130,7 +133,6 @@ func (h *handlerAuth) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check email
-	// err := mysql.DB.First(&user, "email = ?", user.Email).Error
 	user, err := h.AuthRepository.Login(user.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

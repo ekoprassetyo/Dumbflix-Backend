@@ -15,5 +15,4 @@ func AuthRoutes(r *mux.Router) {
 
 	r.HandleFunc("/register", h.Register).Methods("POST")
 	r.HandleFunc("/login", h.Login).Methods("POST")
-	r.HandleFunc("/users", h.GetAllUser).Methods("GET")
 }
