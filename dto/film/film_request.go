@@ -5,6 +5,7 @@ type CreateFilmRequest struct {
 	Title         string `json:"title" gorm:"type: varchar(255)"`
 	ThumbnailFilm string `json:"thumbnailfilm" gorm:"type: varchar(255)"`
 	Year          string `json:"year" gorm:"type: varchar(255)"`
+	CategoryID    int    `json:"category_id" gorm:"type: int"`
 	Description   string `json:"description" gorm:"type: text"`
 }
 
@@ -13,5 +14,6 @@ type UpdateFilmRequest struct {
 	Title         string `json:"title" gorm:"type: varchar(255)"`
 	ThumbnailFilm string `json:"thumbnailfilm" gorm:"type: varchar(255)"`
 	Year          string `json:"year" gorm:"type: varchar(255)"`
+	CategoryID    int    `json:"category_id" gorm:"type: int"`
 	Description   string `json:"description" gorm:"type: text"`
 }

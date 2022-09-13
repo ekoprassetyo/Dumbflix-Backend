@@ -91,22 +91,15 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(dataProfile)
 
-	// generate token
-	claims := jwt.MapClaims{}
-	claims["id"] = dataUser.ID
-	claims["exp"] = time.Now().Add(time.Hour * 2).Unix()
-
-	token, errGenerateToken := jwtToken.GenerateToken(&claims)
-	if errGenerateToken != nil {
-		log.Println(errGenerateToken)
-		fmt.Println("Unauthorize")
-		return
-	}
-
 	registerResponse := authdto.RegisterResponse{
-		Email:  dataUser.Email,
-		Token:  token,
-		Status: dataUser.Status,
+		Name:      dataUser.Name,
+		Email:     dataUser.Email,
+		Password:  password,
+		Gender:    dataUser.Gender,
+		Phone:     dataUser.Phone,
+		Address:   dataUser.Address,
+		Subscribe: false,
+		Status:    "Customer",
 	}
 
 	w.WriteHeader(http.StatusOK)

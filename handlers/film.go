@@ -81,6 +81,7 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		Description:   request.Description,
 		Year:          request.Year,
 		ThumbnailFilm: request.ThumbnailFilm,
+		CategoryID:    request.CategoryID,
 	}
 
 	// err := mysql.DB.Create(&film).Error
@@ -99,52 +100,52 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-// func (h *handlerFilm) UpdateFilm(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Content-Type", "application/json")
+func (h *handlerFilm) UpdateFilm(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
-// 	request := new(filmdto.UpdateFilmRequest)
-// 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-// 		w.WriteHeader(http.StatusBadRequest)
-// 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-// 		json.NewEncoder(w).Encode(response)
-// 		return
-// 	}
+	request := new(filmdto.UpdateFilmRequest)
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 
-// 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
-// 	film, err := h.FilmRepository.GetFilm(int(id))
-// 	if err != nil {
-// 		w.WriteHeader(http.StatusBadRequest)
-// 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-// 		json.NewEncoder(w).Encode(response)
-// 		return
-// 	}
+	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	film, err := h.FilmRepository.GetFilm(int(id))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 
-// 	if request.Title != "" {
-// 		film.Title = request.Title
-// 	}
-// 	if request.ThumbnailFilm != "" {
-// 		film.ThumbnailFilm = request.ThumbnailFilm
-// 	}
-// 	if request.Year != 0 {
-// 		film.Year = request.Year
-// 	}
+	if request.Title != "" {
+		film.Title = request.Title
+	}
+	if request.ThumbnailFilm != "" {
+		film.ThumbnailFilm = request.ThumbnailFilm
+	}
+	if request.Year != "" {
+		film.Year = request.Year
+	}
 
-// 	if request.Description != "" {
-// 		film.Description = request.Description
+	if request.Description != "" {
+		film.Description = request.Description
 
-// 		data, err := h.FilmRepository.UpdateFilm(film)
-// 		if err != nil {
-// 			w.WriteHeader(http.StatusInternalServerError)
-// 			response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
-// 			json.NewEncoder(w).Encode(response)
-// 			return
-// 		}
+		data, err := h.FilmRepository.UpdateFilm(film)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
+			json.NewEncoder(w).Encode(response)
+			return
+		}
 
-// 		w.WriteHeader(http.StatusOK)
-// 		response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponse(data)}
-// 		json.NewEncoder(w).Encode(response)
-// 	}
-// }
+		w.WriteHeader(http.StatusOK)
+		response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponseFilm(data)}
+		json.NewEncoder(w).Encode(response)
+	}
+}
 
 func (h *handlerFilm) DeleteFilm(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -173,9 +174,11 @@ func (h *handlerFilm) DeleteFilm(w http.ResponseWriter, r *http.Request) {
 
 func convertResponseFilm(u models.Film) models.Film {
 	return models.Film{
+		ID:            u.ID,
 		Title:         u.Title,
 		Description:   u.Description,
 		Year:          u.Year,
 		ThumbnailFilm: u.ThumbnailFilm,
+		Category:      u.Category,
 	}
 }
